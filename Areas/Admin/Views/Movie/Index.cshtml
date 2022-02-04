@@ -1,0 +1,52 @@
+﻿@model IEnumerable<Cinema.Models.Movie>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Seanse</h1>
+
+<p>
+    <a asp-action="Create">Dodaj nowy seans</a> |
+    <a asp-action="ShowSearchForm">Szukaj</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.ImagePath)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Name)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Date)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model.Distinct(new MovieComparer())){
+        <tr>
+            <td>
+                <img src="@item.ImagePath" class="rounded-circle" height="100" width="100" asp-append-version="true" />
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Name)
+            </td>
+            <td class="nav-item dropdown show">
+                <a class="dropdown-toggle nav-link" href="#" data-toggle="dropdown">@item.Date</a>
+                <div class="dropdown-menu">
+                    @foreach (var i in Model.Where(x => x.Name == item.Name))
+                    {
+                        <a href="#" class="dropdown-item">@i.Date</a>
+                    }
+                </div>
+            </td>
+            <td>
+                <a asp-action="Details" asp-route-id="@item.Id">Zobacz więcej</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
